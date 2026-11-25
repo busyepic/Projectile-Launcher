@@ -17,29 +17,39 @@ game.Players.PlayerAdded:Connect(function(plr)
 		
 		local humanoid = char:WaitForChild("Humanoid")
 		local HRootPart = char:WaitForChild("HumanoidRootPart")
+		
+		local Initial = Vector3.new(0,0,0)
 		while true do
-			
+			task.wait(0.2)
 			local projClone = Projectile:Clone()
 			
 			projClone.Position = Cannon.Position
 			
 			local Velocity = HRootPart.AssemblyLinearVelocity
 			
-			local alignPos = Instance.new("AlignPosition",projClone)
+			local alignPos = projClone.AlignPosition
 			
 			alignPos.Mode = "OneAttachment"
-			alignPos.MaxForce = 1000000 --1,000,000
+			alignPos.MaxForce = 10000000 --10,000,000
 			alignPos.Attachment0 = projClone.Attachment
-			alignPos.Position = HRootPart.Position
+			
+			print(HRootPart.Position - Initial)
+			print(HRootPart.AssemblyLinearVelocity)
+			
+			local Scale = (HRootPart.Position - Initial)  * 5
+			Scale = Vector3.new(Scale.X,0,Scale.Z)
+			print(Scale)
+			alignPos.Position = HRootPart.Position + Scale
+			print(HRootPart.Position + Scale)
 			
 			projClone.Parent = workspace
-			print(HRootPart.AssemblyLinearVelocity)
+			
 			--local speedVector = math.sqrt(math.pow(HRootPart.AssemblyLinearVelocity.X,2) + math.pow(HRootPart.AssemblyLinearVelocity.Z,2))
 			--print(speedVector) mag of 16
 			game:GetService("Debris"):AddItem(projClone,2)
-			wait(1)
 			
 			
+			Initial = HRootPart.Position
 		end
 		
 	end)
